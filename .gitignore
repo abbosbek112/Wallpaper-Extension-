@@ -1,0 +1,6 @@
+# Packaged extensions
+*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
