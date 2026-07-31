@@ -451,12 +451,6 @@ body.theme-light .nsb-eng-opt.active { background: rgba(0,0,0,0.08); }
   max-width: 100%;
 }
 
-.board.board-wide .todo-list-items {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 8px !important;
-}
-
 .board-blur-bg {
   position: absolute;
   inset: 0;
