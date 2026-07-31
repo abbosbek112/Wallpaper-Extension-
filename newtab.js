@@ -1764,21 +1764,6 @@ function showBoardMenu(boardId, anchor) {
     }
   }
 
-  const otherPages = S.pages.filter(p => p.id !== board.pageId);
-  if (otherPages.length > 0) {
-    if (hasAction) sep();
-    otherPages.forEach(p => {
-      item(T('menu.moveTo') + ' "' + p.name + '"', MENU_ICONS.move, '', () => {
-        board.pageId = p.id;
-        board.col = 0;
-        board.row = 0;
-        saveState();
-        renderBoards();
-      });
-    });
-    hasAction = true;
-  }
-
   if (hasAction) sep();
   item(T('menu.deleteBoard'), MENU_ICONS.trash, 'danger', () => deleteBoard(boardId));
 
