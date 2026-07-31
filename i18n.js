@@ -173,6 +173,7 @@
       'menu.rename': 'Rename',
       'menu.openAll': 'Open all links',
       'menu.deleteBoard': 'Delete board',
+      'menu.moveTo': 'Move to',
       // onboarding
       'onboard.title': 'Welcome to Wallpaper',
       'onboard.sub': 'Your new tab, organized.',
@@ -464,6 +465,7 @@
       'menu.rename': 'Переименовать',
       'menu.openAll': 'Открыть все ссылки',
       'menu.deleteBoard': 'Удалить доску',
+      'menu.moveTo': 'Переместить в',
       'onboard.title': 'Добро пожаловать в Wallpaper',
       'onboard.sub': 'Новая вкладка, где всё под рукой.',
       'onboard.google': 'Войти через Google',

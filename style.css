@@ -250,6 +250,12 @@ body {
   box-shadow: 0 0 8px var(--accent-color, rgba(255,255,255,0.5));
 }
 .page-tab.dragging { opacity: 0.35; }
+.page-tab.drag-over {
+  border-color: var(--accent-color, #e07a4a) !important;
+  background: rgba(var(--accent-rgb, 224, 122, 74), 0.15) !important;
+  color: var(--board-text-primary, #fff) !important;
+  transform: scale(1.05);
+}
 .tab-drop-indicator {
   flex: 0 0 2px;
   width: 2px;

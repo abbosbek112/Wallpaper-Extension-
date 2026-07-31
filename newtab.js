@@ -932,7 +932,14 @@ function renderPages() {
     });
 
     tab.addEventListener('dragover', e => {
-      if (!_dragId || _dragId === page.id) return;
+      if (!_dragId) return;
+      const isBoard = S.boards.some(b => b.id === _dragId);
+      if (isBoard) {
+        e.preventDefault();
+        tab.classList.add('drag-over');
+        return;
+      }
+      if (_dragId === page.id) return;
       e.preventDefault();
       clearDropIndicators();
       const rect = tab.getBoundingClientRect();
@@ -942,10 +949,25 @@ function renderPages() {
       group.insertBefore(indicator, before ? tab : tab.nextSibling);
     });
 
+    tab.addEventListener('dragleave', () => {
+      tab.classList.remove('drag-over');
+    });
+
     tab.addEventListener('drop', e => {
       e.preventDefault();
-      if (!_dragId || _dragId === page.id) return;
       clearDropIndicators();
+      const draggedBoard = S.boards.find(b => b.id === _dragId);
+      if (draggedBoard) {
+        if (draggedBoard.pageId !== page.id) {
+          draggedBoard.pageId = page.id;
+          draggedBoard.col = 0;
+          draggedBoard.row = 0;
+          saveState();
+          renderBoards();
+        }
+        return;
+      }
+      if (!_dragId || _dragId === page.id) return;
       const rect = tab.getBoundingClientRect();
       const before = e.clientX < rect.left + rect.width / 2;
       const sorted = [...S.pages].sort((a, b) => a.order - b.order);
@@ -1587,6 +1609,7 @@ const MENU_ICONS = {
   rename:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>',
   openAll:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
   trash:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>',
+  move:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
 };
 
 // Builds a context-menu shell with a consistent icon + label row style.
@@ -1739,6 +1762,21 @@ function showBoardMenu(boardId, anchor) {
       });
       hasAction = true;
     }
+  }
+
+  const otherPages = S.pages.filter(p => p.id !== board.pageId);
+  if (otherPages.length > 0) {
+    if (hasAction) sep();
+    otherPages.forEach(p => {
+      item(T('menu.moveTo') + ' "' + p.name + '"', MENU_ICONS.move, '', () => {
+        board.pageId = p.id;
+        board.col = 0;
+        board.row = 0;
+        saveState();
+        renderBoards();
+      });
+    });
+    hasAction = true;
   }
 
   if (hasAction) sep();
